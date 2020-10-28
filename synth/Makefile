@@ -3,6 +3,7 @@ DOTF=$(HDL)/fpga/smoldvi_fpga_icebreaker.f
 
 DEVICE=up5k
 PACKAGE=sg48
+PNR_OPT=--pre-pack smoldvi_icebreaker_prepack.py --timing-allow-fail
 
 include $(SCRIPTS)/synth_ice40.mk
 

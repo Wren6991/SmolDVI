@@ -1,0 +1,202 @@
+Info: constrained 'led[0]' to bel 'X13/Y31/io0'
+Info: constrained 'led[1]' to bel 'X17/Y0/io0'
+Info: constrained 'clk_osc' to bel 'X12/Y31/io1'
+Info: constrained 'dvi_p[1]' to bel 'X18/Y31/io1'
+Info: constrained 'dvi_n[1]' to bel 'X19/Y31/io1'
+Info: constrained 'dvi_p[3]' to bel 'X18/Y0/io1'
+Info: constrained 'dvi_n[3]' to bel 'X21/Y0/io1'
+Info: constrained 'dvi_p[2]' to bel 'X18/Y31/io0'
+Info: constrained 'dvi_n[2]' to bel 'X19/Y31/io0'
+Info: constrained 'dvi_p[0]' to bel 'X19/Y0/io1'
+Info: constrained 'dvi_n[0]' to bel 'X22/Y0/io1'
+
+Info: Packing constants..
+Info: Packing IOs..
+Info: Packing LUT-FFs..
+Info:        8 LCs used as LUT4 only
+Info:       24 LCs used as LUT4 and DFF
+Info: Packing non-LUT FFs..
+Info:        0 LCs used as DFF only
+Info: Packing carries..
+Info:        0 LCs used as CARRY only
+Info: Packing RAMs..
+Info: Placing PLLs..
+Info: Packing special functions..
+Info: Promoting globals..
+Info: promoting clk_osc$SB_IO_IN (fanout 24)
+Info: promoting blink.ctr_SB_DFFSR_Q_R [reset] (fanout 23)
+Info: Constraining chains...
+Info:        1 LCs used to legalise carry chains.
+Info: Checksum: 0x9faa4fc4
+
+Info: Annotating ports with timing budgets for target frequency 12.00 MHz
+Info: Checksum: 0x042562b8
+
+Info: Device utilisation:
+Info: 	         ICESTORM_LC:    35/ 5280     0%
+Info: 	        ICESTORM_RAM:     0/   30     0%
+Info: 	               SB_IO:    11/   96    11%
+Info: 	               SB_GB:     2/    8    25%
+Info: 	        ICESTORM_PLL:     0/    1     0%
+Info: 	         SB_WARMBOOT:     0/    1     0%
+Info: 	        ICESTORM_DSP:     0/    8     0%
+Info: 	      ICESTORM_HFOSC:     0/    1     0%
+Info: 	      ICESTORM_LFOSC:     0/    1     0%
+Info: 	              SB_I2C:     0/    2     0%
+Info: 	              SB_SPI:     0/    2     0%
+Info: 	              IO_I3C:     0/    2     0%
+Info: 	         SB_LEDDA_IP:     0/    1     0%
+Info: 	         SB_RGBA_DRV:     0/    1     0%
+Info: 	      ICESTORM_SPRAM:     0/    4     0%
+
+Info: Placed 11 cells based on constraints.
+Info: Creating initial placement for remaining 37 cells.
+Info:   initial placement placed 37/37 cells
+Info: Initial placement time 0.01s
+Info: Running simulated annealing placer.
+Info:   at iteration #1: temp = 1.000000, timing cost = 58, wirelen = 946
+Info:   at iteration #5: temp = 0.364500, timing cost = 81, wirelen = 1139
+Info:   at iteration #10: temp = 0.311647, timing cost = 75, wirelen = 798
+Info:   at iteration #15: temp = 0.241147, timing cost = 66, wirelen = 859
+Info:   at iteration #20: temp = 0.217635, timing cost = 81, wirelen = 680
+Info:   at iteration #25: temp = 0.186595, timing cost = 77, wirelen = 734
+Info:   at iteration #30: temp = 0.168402, timing cost = 69, wirelen = 815
+Info:   at iteration #35: temp = 0.144384, timing cost = 52, wirelen = 631
+Info:   at iteration #40: temp = 0.137164, timing cost = 59, wirelen = 538
+Info:   at iteration #45: temp = 0.117601, timing cost = 54, wirelen = 555
+Info:   at iteration #50: temp = 0.100828, timing cost = 67, wirelen = 644
+Info:   at iteration #55: temp = 0.086448, timing cost = 66, wirelen = 466
+Info:   at iteration #60: temp = 0.078019, timing cost = 50, wirelen = 500
+Info:   at iteration #65: temp = 0.063547, timing cost = 61, wirelen = 470
+Info: Legalising relative constraints...
+Info:     moved 17 cells, 0 unplaced (after legalising chains)
+Info:        average distance 0.789071
+Info:        maximum distance 1.414214
+Info:     moved 17 cells, 0 unplaced (after replacing ripped up cells)
+Info:        average distance 0.789071
+Info:        maximum distance 1.414214
+Info:   at iteration #70: temp = 0.051616, timing cost = 58, wirelen = 389
+Info:   at iteration #75: temp = 0.044132, timing cost = 62, wirelen = 372
+Info:   at iteration #80: temp = 0.044132, timing cost = 55, wirelen = 283
+Info:   at iteration #85: temp = 0.034148, timing cost = 59, wirelen = 289
+Info:   at iteration #90: temp = 0.030819, timing cost = 49, wirelen = 190
+Info:   at iteration #95: temp = 0.030819, timing cost = 36, wirelen = 143
+Info:   at iteration #100: temp = 0.027814, timing cost = 33, wirelen = 163
+Info:   at iteration #105: temp = 0.023847, timing cost = 39, wirelen = 132
+Info:   at iteration #110: temp = 0.021522, timing cost = 51, wirelen = 133
+Info:   at iteration #115: temp = 0.019424, timing cost = 39, wirelen = 95
+Info:   at iteration #120: temp = 0.018452, timing cost = 27, wirelen = 95
+Info:   at iteration #125: temp = 0.017530, timing cost = 35, wirelen = 68
+Info:   at iteration #130: temp = 0.015821, timing cost = 40, wirelen = 78
+Info:   at iteration #135: temp = 0.015030, timing cost = 30, wirelen = 69
+Info:   at iteration #140: temp = 0.013564, timing cost = 37, wirelen = 57
+Info:   at iteration #145: temp = 0.012242, timing cost = 34, wirelen = 59
+Info:   at iteration #150: temp = 0.010496, timing cost = 33, wirelen = 51
+Info:   at iteration #155: temp = 0.007578, timing cost = 33, wirelen = 48
+Info:   at iteration #160: temp = 0.004850, timing cost = 37, wirelen = 44
+Info:   at iteration #165: temp = 0.002483, timing cost = 37, wirelen = 43
+Info:   at iteration #170: temp = 0.000814, timing cost = 37, wirelen = 43
+Info:   at iteration #175: temp = 0.000267, timing cost = 37, wirelen = 43
+Info:   at iteration #180: temp = 0.000087, timing cost = 37, wirelen = 43
+Info:   at iteration #185: temp = 0.000029, timing cost = 37, wirelen = 43
+Info:   at iteration #190: temp = 0.000009, timing cost = 37, wirelen = 43
+Info:   at iteration #195: temp = 0.000003, timing cost = 37, wirelen = 43
+Info:   at iteration #200: temp = 0.000001, timing cost = 37, wirelen = 43
+Info:   at iteration #205: temp = 0.000000, timing cost = 37, wirelen = 43
+Info:   at iteration #210: temp = 0.000000, timing cost = 37, wirelen = 43
+Info:   at iteration #211: temp = 0.000000, timing cost = 37, wirelen = 43 
+Info: SA placement time 0.20s
+
+Info: Max frequency for clock 'clk_osc$SB_IO_IN_$glb_clk': 48.32 MHz (PASS at 12.00 MHz)
+
+Info: Max delay posedge clk_osc$SB_IO_IN_$glb_clk -> <async>: 3.15 ns
+
+Info: Slack histogram:
+Info:  legend: * represents 1 endpoint(s)
+Info:          + represents [1,1) endpoint(s)
+Info: [ 62636,  63514) |*********************** 
+Info: [ 63514,  64392) | 
+Info: [ 64392,  65270) | 
+Info: [ 65270,  66148) | 
+Info: [ 66148,  67026) | 
+Info: [ 67026,  67904) | 
+Info: [ 67904,  68782) | 
+Info: [ 68782,  69660) |* 
+Info: [ 69660,  70538) | 
+Info: [ 70538,  71416) | 
+Info: [ 71416,  72294) |*** 
+Info: [ 72294,  73172) |**** 
+Info: [ 73172,  74050) |* 
+Info: [ 74050,  74928) |*** 
+Info: [ 74928,  75806) |**** 
+Info: [ 75806,  76684) |** 
+Info: [ 76684,  77562) |*** 
+Info: [ 77562,  78440) |* 
+Info: [ 78440,  79318) |********************** 
+Info: [ 79318,  80196) |**** 
+Info: Checksum: 0x508c67d2
+
+Info: Routing..
+Info: Setting up routing queue.
+Info: Routing 133 arcs.
+Info:            |   (re-)routed arcs  |   delta    | remaining|       time spent     |
+Info:    IterCnt |  w/ripup   wo/ripup |  w/r  wo/r |      arcs| batch(sec) total(sec)|
+Info:        135 |        1        134 |    1   134 |         0|       0.14       0.14|
+Info: Routing complete.
+Info: Router1 time 0.14s
+Info: Checksum: 0xdc2b3d43
+
+Info: Critical path report for clock 'clk_osc$SB_IO_IN_$glb_clk' (posedge -> posedge):
+Info: curr total
+Info:  1.4  1.4  Source blink.ctr_SB_DFFSR_Q_D_SB_LUT4_O_8_LC.O
+Info:  1.8  3.2    Net blink.ctr[4] budget 11.724000 ns (12,17) -> (13,17)
+Info:                Sink blink.ctr_SB_DFFSR_Q_R_SB_LUT4_O_I0_SB_LUT4_O_I2_SB_LUT4_O_LC.I0
+Info:  1.3  4.4  Source blink.ctr_SB_DFFSR_Q_R_SB_LUT4_O_I0_SB_LUT4_O_I2_SB_LUT4_O_LC.O
+Info:  1.8  6.2    Net blink.ctr_SB_DFFSR_Q_R_SB_LUT4_O_I0_SB_LUT4_O_I2 budget 12.293000 ns (13,17) -> (13,17)
+Info:                Sink blink.ctr_SB_DFFSR_Q_R_SB_LUT4_O_I0_SB_LUT4_O_LC.I2
+Info:  1.2  7.4  Source blink.ctr_SB_DFFSR_Q_R_SB_LUT4_O_I0_SB_LUT4_O_LC.O
+Info:  1.8  9.2    Net blink.ctr_SB_DFFSR_Q_R_SB_LUT4_O_I0 budget 11.796000 ns (13,17) -> (13,18)
+Info:                Sink blink.ctr_SB_DFFSR_Q_R_SB_LUT4_O_LC.I0
+Info:  1.3 10.4  Source blink.ctr_SB_DFFSR_Q_R_SB_LUT4_O_LC.O
+Info:  4.2 14.7    Net blink.ctr_SB_DFFSR_Q_R budget 12.773000 ns (13,18) -> (12,31)
+Info:                Sink $gbuf_blink.ctr_SB_DFFSR_Q_R_$glb_sr.USER_SIGNAL_TO_GLOBAL_BUFFER
+Info:  1.6 16.3  Source $gbuf_blink.ctr_SB_DFFSR_Q_R_$glb_sr.GLOBAL_BUFFER_OUTPUT
+Info:  0.6 16.9    Net blink.ctr_SB_DFFSR_Q_R_$glb_sr budget 13.128000 ns (12,31) -> (12,19)
+Info:                Sink blink.ctr_SB_DFFSR_Q_D_SB_LUT4_O_12_LC.SR
+Info:  0.1 17.0  Setup blink.ctr_SB_DFFSR_Q_D_SB_LUT4_O_12_LC.SR
+Info: 6.9 ns logic, 10.2 ns routing
+
+Info: Critical path report for cross-domain path 'posedge clk_osc$SB_IO_IN_$glb_clk' -> '<async>':
+Info: curr total
+Info:  1.4  1.4  Source blink.blink_r_SB_LUT4_I3_LC.O
+Info:  1.8  3.2    Net led[0]$SB_IO_OUT budget 81.943001 ns (13,30) -> (13,31)
+Info:                Sink led[0]$sb_io.D_OUT_0
+Info: 1.4 ns logic, 1.8 ns routing
+
+Info: Max frequency for clock 'clk_osc$SB_IO_IN_$glb_clk': 58.81 MHz (PASS at 12.00 MHz)
+
+Info: Max delay posedge clk_osc$SB_IO_IN_$glb_clk -> <async>: 3.15 ns
+
+Info: Slack histogram:
+Info:  legend: * represents 1 endpoint(s)
+Info:          + represents [1,1) endpoint(s)
+Info: [ 66329,  67022) |*********************** 
+Info: [ 67022,  67715) | 
+Info: [ 67715,  68408) | 
+Info: [ 68408,  69101) |* 
+Info: [ 69101,  69794) | 
+Info: [ 69794,  70487) | 
+Info: [ 70487,  71180) |* 
+Info: [ 71180,  71873) |** 
+Info: [ 71873,  72566) |*** 
+Info: [ 72566,  73259) |* 
+Info: [ 73259,  73952) |** 
+Info: [ 73952,  74645) |** 
+Info: [ 74645,  75338) |*** 
+Info: [ 75338,  76031) |* 
+Info: [ 76031,  76724) |** 
+Info: [ 76724,  77417) |** 
+Info: [ 77417,  78110) |** 
+Info: [ 78110,  78803) | 
+Info: [ 78803,  79496) |************************* 
+Info: [ 79496,  80189) |* 

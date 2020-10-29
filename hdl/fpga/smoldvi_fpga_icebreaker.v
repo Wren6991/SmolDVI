@@ -29,14 +29,6 @@ pll_12_126 #(
 	.locked    (pll_lock)
 );
 
-// We are generating our PoR in the bit clock domain, because the root
-// oscillator is not easily available (I think there is some magic with the
-// SB_PLL40_PAD macro that lets you get a buffered input clock but idk right
-// now). The deassertion of this reset must be resynchronised to the pixel
-// clock domain for use there, but we *also* put it through a synchroniser in
-// the bit clock domain, i.e. the domain it originated from, to keep the
-// deassertions closer together, and get more margin at the CDC gearbox.
-
 fpga_reset #(
 	.SHIFT (3),
 	.COUNT (0)

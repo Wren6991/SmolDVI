@@ -66,7 +66,7 @@ dvi_tx_parallel #(
 	.tmds0   (tmds0)
 );
 
-dvi_serialiser ser_d0 (
+smoldvi_serialiser ser_d0 (
 	.clk_pix   (clk_pix),
 	.rst_n_pix (rst_n_pix),
 	.clk_x5    (clk_bit),
@@ -77,7 +77,7 @@ dvi_serialiser ser_d0 (
 	.qn        (dvi_n[0])
 );
 
-dvi_serialiser ser_d1 (
+smoldvi_serialiser ser_d1 (
 	.clk_pix   (clk_pix),
 	.rst_n_pix (rst_n_pix),
 	.clk_x5    (clk_bit),
@@ -88,7 +88,7 @@ dvi_serialiser ser_d1 (
 	.qn        (dvi_n[1])
 );
 
-dvi_serialiser ser_d2 (
+smoldvi_serialiser ser_d2 (
 	.clk_pix   (clk_pix),
 	.rst_n_pix (rst_n_pix),
 	.clk_x5    (clk_bit),
@@ -99,9 +99,7 @@ dvi_serialiser ser_d2 (
 	.qn        (dvi_n[2])
 );
 
-dvi_serialiser ser_ck (
-	.clk_pix   (clk_pix),
-	.rst_n_pix (rst_n_pix),
+smoldvi_clock_driver ser_ck (
 	.clk_x5    (clk_bit),
 	.rst_n_x5  (rst_n_bit),
 

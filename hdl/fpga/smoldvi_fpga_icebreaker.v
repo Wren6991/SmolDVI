@@ -1,3 +1,5 @@
+`default_nettype none
+
 module smoldvi_fpga (
 	input wire                     clk_osc,
 

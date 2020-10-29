@@ -1,0 +1,37 @@
+# LEDs
+set_io led[0] 95 # Green
+set_io led[1] 96 # Red
+
+set_io clk_osc 21
+
+# DVI on PMOD
+set_io  dvi_p[2] 78 #  Pin 1 
+set_io  dvi_n[2] 79 #  Pin 2 
+set_io  dvi_p[0] 80 #  Pin 3 
+set_io  dvi_n[0] 81 #  Pin 4 
+set_io  dvi_p[1] 87 #  Pin 7 
+set_io  dvi_n[1] 88 #  Pin 8 
+set_io  dvi_p[3] 90 #  Pin 9 
+set_io  dvi_n[3] 91 #  Pin 10
+
+# Reference comment thanks to Apio:
+#
+##      --------
+##     |  12  6 |
+##     |  11  5 |
+##     |  10  4 |
+##     |  9   3 |
+##     |  8   2 |
+##     |  7   1 | <
+##      --------
+##
+##   FPGA pins:
+##
+##     ----------
+##    | 3V3  3V3 |
+##    | GND  GND |
+##    | 91    81 |
+##    | 90    80 |
+##    | 88    79 |
+##    | 87    78 | <
+##     ----------

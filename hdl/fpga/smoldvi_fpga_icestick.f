@@ -1,4 +1,4 @@
-file smoldvi_fpga_icebreaker.v
+file smoldvi_fpga_icestick.v
 file pll_12_126.v
 
 list $HDL/smoldvi/smoldvi_top.f

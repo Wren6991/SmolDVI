@@ -14,8 +14,8 @@ module smoldvi_fpga (
 wire clk_pix;
 wire clk_bit;
 wire rst_n_osc;
-wire rst_n_pix;
-wire rst_n_bit;
+wire rst_n_pix
+;wire rst_n_bit;
 wire pll_lock;
 
 
@@ -27,7 +27,7 @@ pll_12_126 pll_bit (
 
 fpga_reset #(
 	.SHIFT (3),
-	.COUNT (127)
+	.COUNT (0)
 ) rstgen (
 	.clk         (clk_bit),
 	.force_rst_n (pll_lock),
@@ -47,8 +47,8 @@ reset_sync reset_sync_pix (
 );
 
 
-// Generate clk_pix from clk_bit with ring counter (fixme)
-reg [4:0] bit_pix_div;
+// Generate clk_pix from clk_bit with ring counter (hack)
+(* keep = 1'b1 *) reg [4:0] bit_pix_div;
 assign clk_pix = bit_pix_div[0];
 
 always @ (posedge clk_bit or negedge rst_n_bit) begin
@@ -68,6 +68,15 @@ blinky #(
 	.clk   (clk_pix),
 	.blink (led[0])
 );
+
+smoldvi_top inst_smoldvi_top (
+		.clk_pix   (clk_pix),
+		.rst_n_pix (rst_n_pix),
+		.clk_bit   (clk_bit),
+		.rst_n_bit (rst_n_bit),
+		.dvi_p     (dvi_p),
+		.dvi_n     (dvi_n)
+	);
 
 
 endmodule

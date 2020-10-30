@@ -9,7 +9,6 @@ module smoldvi_clock_driver (
 	input  wire       clk_x5,
 	input  wire       rst_n_x5,
 
-	input  wire [9:0] d,
 	output wire       qp,
 	output wire       qn
 );

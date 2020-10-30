@@ -1,4 +1,4 @@
-file smoldvi_top.v
+file smoldvi.v
 file smoldvi_serialiser.v
 file smoldvi_clock_driver.v
 file smoldvi_fast_gearbox.v

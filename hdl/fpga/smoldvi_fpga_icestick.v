@@ -69,14 +69,50 @@ blinky #(
 	.blink (led[0])
 );
 
-smoldvi_top inst_smoldvi_top (
-		.clk_pix   (clk_pix),
-		.rst_n_pix (rst_n_pix),
-		.clk_bit   (clk_bit),
-		.rst_n_bit (rst_n_bit),
-		.dvi_p     (dvi_p),
-		.dvi_n     (dvi_n)
-	);
+
+// DVI instantiation + test pattern
+
+wire rgb_rdy;
+reg [9:0] x_ctr;
+reg [8:0] y_ctr;
+reg [7:0] frame_ctr;
+
+always @ (posedge clk_pix or negedge rst_n_pix) begin
+	if (!rst_n_pix) begin
+		x_ctr <= 10'h0;
+		y_ctr <= 9'h0;
+		frame_ctr <= 8'h0;
+	end else if (rgb_rdy) begin
+		if (x_ctr == 10'd639) begin
+			x_ctr <= 10'h0;
+			if (y_ctr == 9'd479) begin
+				y_ctr <= 9'h0;
+				frame_ctr <= frame_ctr + 1'b1;
+			end else begin
+				y_ctr <= y_ctr + 1'b1;
+			end
+		end else begin
+			x_ctr <= x_ctr + 1'b1;
+		end
+	end
+end
+
+smoldvi inst_smoldvi (
+	.clk_pix   (clk_pix),
+	.rst_n_pix (rst_n_pix),
+	.clk_bit   (clk_bit),
+	.rst_n_bit (rst_n_bit),
+
+	.en        (1'b1),
+
+	.r         (x_ctr + frame_ctr),
+	.g         (y_ctr + 2 * frame_ctr),
+	.b         (frame_ctr),
+	.rgb_rdy   (rgb_rdy),
+
+	.dvi_p     (dvi_p),
+	.dvi_n     (dvi_n)
+);
 
 
 endmodule

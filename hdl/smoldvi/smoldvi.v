@@ -33,11 +33,13 @@ module smoldvi #(
 	output wire [3:0] dvi_n
 );
 
-wire [9:0] tmds0;
-wire [9:0] tmds1;
-wire [9:0] tmds2;
 
-dvi_tx_parallel #(
+wire hsync;
+wire vsync;
+wire den;
+assign rgb_rdy = den;
+
+dvi_timing #(
 	.H_SYNC_POLARITY (H_SYNC_POLARITY),
 	.H_FRONT_PORCH   (H_FRONT_PORCH),
 	.H_SYNC_WIDTH    (H_SYNC_WIDTH),
@@ -49,17 +51,45 @@ dvi_tx_parallel #(
 	.V_SYNC_WIDTH    (V_SYNC_WIDTH),
 	.V_BACK_PORCH    (V_BACK_PORCH),
 	.V_ACTIVE_LINES  (V_ACTIVE_LINES)
-) dvi (
-	.clk     (clk_pix),
-	.rst_n   (rst_n_pix),
-	.en      (en),
-	.r       (r),
-	.g       (g),
-	.b       (b),
-	.rgb_rdy (rgb_rdy),
-	.tmds2   (tmds2),
-	.tmds1   (tmds1),
-	.tmds0   (tmds0)
+) inst_dvi_timing (
+	.clk   (clk_pix),
+	.rst_n (rst_n_pix),
+	.en    (en),
+
+	.vsync (vsync),
+	.hsync (hsync),
+	.den   (den)
+);
+
+wire [9:0] tmds0;
+wire [9:0] tmds1;
+wire [9:0] tmds2;
+
+smoldvi_tmds_encode tmds0_encoder (
+	.clk   (clk_pix),
+	.rst_n (rst_n_pix),
+	.c     ({vsync, hsync}),
+	.d     (b),
+	.den   (den),
+	.q     (tmds0)
+);
+
+smoldvi_tmds_encode tmds1_encoder (
+	.clk   (clk_pix),
+	.rst_n (rst_n_pix),
+	.c     (2'b00),
+	.d     (g),
+	.den   (den),
+	.q     (tmds1)
+);
+
+smoldvi_tmds_encode tmds2_encoder (
+	.clk   (clk_pix),
+	.rst_n (rst_n_pix),
+	.c     (2'b00),
+	.d     (r),
+	.den   (den),
+	.q     (tmds2)
 );
 
 smoldvi_serialiser ser_d0 (

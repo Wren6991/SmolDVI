@@ -1,33 +1,3 @@
-// For CDC we need a 10:2 gearbox (pixel domain to DDR bit domain) with at
-// least 20 bits of storage, preferably 40. However the standard gearbox in
-// libfpga struggles to reach the 126 MHz half-bit-clock frequency on UP5k, so
-// we create a faster gearbox which works as follows:
-//
-// - Pixel domain writes to successive chunks of a N*10-flop register as usual
-//
-// - These N*10 launch flops are overlaid with N*10 DFFEs (the sampling
-//   register), in half-bit-clock domain, of which only 2 DFFEs are
-//   enabled on each cycle
-//
-// - On each successive clock cycle, the next two sampling flops are enabled,
-//   such that sampling runs around the sampling register at the same rate as
-//   transitions run around the launching register
-//
-// - Because we have guaranteed spacing between *enabled* sampling flops, and
-//   *transitioning* launch flops, no part of the sampling register should
-//   become metastable
-//
-// - Once we are safely in the half-bit-clock domain, we can do a
-//   pipelined one-hot mux to pull out the correct bit pair from the sampling
-//   register, and pass this on to the DDR output regs in the IO tiles
-//
-// - The one-hot mask used for both DFFE enables and muxing can be generated
-//   with a simple ring counter, rather than decoding from a binary counter.
-//   This avoids any carry chain, and limits the fanout of each flop in the
-//   counter to 3, no matter how large the CDC storage is.
-
-`default_nettype none
-
 module smoldvi_fast_gearbox #(
 	parameter W_IN = 10,
 	parameter W_OUT = 2,

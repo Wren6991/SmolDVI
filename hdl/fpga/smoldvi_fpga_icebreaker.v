@@ -86,7 +86,7 @@ always @ (posedge clk_pix or negedge rst_n_pix) begin
 		y_ctr <= 9'h0;
 		frame_ctr <= 8'h0;
 	end else if (rgb_rdy) begin
-		if (x_ctr == 10'd639) begin
+		if (x_ctr == 10'd638) begin
 			x_ctr <= 10'h0;
 			if (y_ctr == 9'd479) begin
 				y_ctr <= 9'h0;
@@ -95,7 +95,8 @@ always @ (posedge clk_pix or negedge rst_n_pix) begin
 				y_ctr <= y_ctr + 1'b1;
 			end
 		end else begin
-			x_ctr <= x_ctr + 1'b1;
+			// Note x advances by 2 because of pixel doubling
+			x_ctr <= x_ctr + 2'h2;
 		end
 	end
 end

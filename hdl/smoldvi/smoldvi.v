@@ -12,7 +12,9 @@ module smoldvi #(
 	parameter V_FRONT_PORCH     = 10,
 	parameter V_SYNC_WIDTH      = 2,
 	parameter V_BACK_PORCH      = 33,
-	parameter V_ACTIVE_LINES    = 480
+	parameter V_ACTIVE_LINES    = 480,
+
+	parameter COLOUR_SIGNIFICANT_BITS = 6
 ) (
 	// Full-rate pixel clock, half-rate bit clock. Must have exact 1:5 frequency
 	// ratio, and a common root oscillator
@@ -37,7 +39,20 @@ module smoldvi #(
 wire hsync;
 wire vsync;
 wire den;
-assign rgb_rdy = den;
+
+reg den_prev;
+reg rgb_rdy_prev;
+assign rgb_rdy = den && den_prev && !rgb_rdy_prev;
+
+always @ (posedge clk_pix or negedge rst_n_pix) begin
+	if (!rst_n_pix) begin
+		den_prev <= 1'b0;
+		rgb_rdy_prev <= 1'b0;		
+	end else begin
+		den_prev <= den;
+		rgb_rdy_prev <= rgb_rdy;
+	end
+end
 
 dvi_timing #(
 	.H_SYNC_POLARITY (H_SYNC_POLARITY),
@@ -61,6 +76,8 @@ dvi_timing #(
 	.den   (den)
 );
 
+localparam COLOUR_MASK = ~(8'hff >> COLOUR_SIGNIFICANT_BITS);
+
 wire [9:0] tmds0;
 wire [9:0] tmds1;
 wire [9:0] tmds2;
@@ -69,7 +86,7 @@ smoldvi_tmds_encode tmds0_encoder (
 	.clk   (clk_pix),
 	.rst_n (rst_n_pix),
 	.c     ({vsync, hsync}),
-	.d     (b),
+	.d     (b & COLOUR_MASK),
 	.den   (den),
 	.q     (tmds0)
 );
@@ -78,7 +95,7 @@ smoldvi_tmds_encode tmds1_encoder (
 	.clk   (clk_pix),
 	.rst_n (rst_n_pix),
 	.c     (2'b00),
-	.d     (g),
+	.d     (g & COLOUR_MASK),
 	.den   (den),
 	.q     (tmds1)
 );
@@ -87,7 +104,7 @@ smoldvi_tmds_encode tmds2_encoder (
 	.clk   (clk_pix),
 	.rst_n (rst_n_pix),
 	.c     (2'b00),
-	.d     (r),
+	.d     (r & COLOUR_MASK),
 	.den   (den),
 	.q     (tmds2)
 );

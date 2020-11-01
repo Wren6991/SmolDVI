@@ -1,3 +1,49 @@
+// This encoder is based on a property of the TMDS algorithm specified in DVI
+// spec: If the running balance is currently zero, and you encode data x
+// followed by x ^ 1, this produces a pair of TMDS symbols with net balance
+// zero, hence the running balance will *remain* at zero. Provided the input
+// follows this pattern (doubled pixels with alternating LSB), there is no
+// need to actually track the balance, which makes the encoder effectively
+// stateless.
+//
+// This leads to:
+// - Halving of horizontal resolution
+// - Loss of LSB (bit 0) of colour precision
+// - Toggling of colour LSBs (bit 0) across screen
+//
+// But this last effect is not noticeable in practice, and the first two are
+// acceptable for any pixel source that would fit onto a iCE40 UP5k or HX1k.
+//
+// Our TMDS algorithm:
+//
+// - Mask off d[0]
+// - If population count of d[7:0] less than 4:
+//     - q[9:8] = 2'b01 for both output symbols
+//     - First symbol q[n] = ^d[n:0] for n = 0...7
+//     - Second symbol inverse of first q[7:0] (thanks to input LSB toggling)
+// - Else:
+//     - q[9:8] = 2'b10 for both output symbols
+//     - First symbol same as less than case but XOR'd with 'h55 (this
+//       accounts for both XNOR-ness and q[9] complementing)
+//     - Second symbol inverse of first q[7:0] (thanks to input LSB toggling)
+//
+// These rules *exactly* reproduce Figure 3-5 on page 29 of DVI v1.0 spec, if
+// the pixels input to that algorithm are manipulated properly. You can check
+// this by enumerating all possible input values, running them through the
+// original algorithm with initial balance = 0 (recalling that balance is
+// defined to be 0 at the start of each scanline), and noting that the balance
+// returns to 0 after each output pixel pair, forming the sketch of an
+// induction proof.
+//
+// To check that the output of our algorithm is DC-balanced, observe that bits
+// q[9:8] always have one bit set, and bits q[7:0] are complemented over
+// consecutive pixels, so have an average population count of 4 out of 8.
+// Therefore for every 20 bits we output (2 TMDS symbols), there are 10 1 bits
+// and 10 0 bits.
+//
+// Note that the instantiator is responsible for holding d[7:0] constant over
+// two cycles (it's not registered here)
+
 module smoldvi_tmds_encode (
 	input  wire       clk,
 	input  wire       rst_n,
@@ -9,91 +55,43 @@ module smoldvi_tmds_encode (
 	output reg  [9:0] q
 );
 
-reg [9:0] sym0, sym1;
+reg [2:0] popcount;
+wire low_balance = !popcount[2];
 
-always @ (*) begin
-	case (d[7:2])
-		0 : begin sym0 = 10'h100; sym1 = 10'h1ff; end
-		1 : begin sym0 = 10'h1fc; sym1 = 10'h103; end
-		2 : begin sym0 = 10'h1f8; sym1 = 10'h107; end
-		3 : begin sym0 = 10'h104; sym1 = 10'h1fb; end
-		4 : begin sym0 = 10'h1f0; sym1 = 10'h10f; end
-		5 : begin sym0 = 10'h10c; sym1 = 10'h1f3; end
-		6 : begin sym0 = 10'h108; sym1 = 10'h1f7; end
-		7 : begin sym0 = 10'h1f4; sym1 = 10'h10b; end
-		8 : begin sym0 = 10'h1e0; sym1 = 10'h11f; end
-		9 : begin sym0 = 10'h11c; sym1 = 10'h1e3; end
-		10: begin sym0 = 10'h118; sym1 = 10'h1e7; end
-		11: begin sym0 = 10'h1e4; sym1 = 10'h11b; end
-		12: begin sym0 = 10'h110; sym1 = 10'h1ef; end
-		13: begin sym0 = 10'h1ec; sym1 = 10'h113; end
-		14: begin sym0 = 10'h1e8; sym1 = 10'h117; end
-		15: begin sym0 = 10'h241; sym1 = 10'h2be; end
-		16: begin sym0 = 10'h1c0; sym1 = 10'h13f; end
-		17: begin sym0 = 10'h13c; sym1 = 10'h1c3; end
-		18: begin sym0 = 10'h138; sym1 = 10'h1c7; end
-		19: begin sym0 = 10'h1c4; sym1 = 10'h13b; end
-		20: begin sym0 = 10'h130; sym1 = 10'h1cf; end
-		21: begin sym0 = 10'h1cc; sym1 = 10'h133; end
-		22: begin sym0 = 10'h1c8; sym1 = 10'h137; end
-		23: begin sym0 = 10'h261; sym1 = 10'h29e; end
-		24: begin sym0 = 10'h120; sym1 = 10'h1df; end
-		25: begin sym0 = 10'h1dc; sym1 = 10'h123; end
-		26: begin sym0 = 10'h1d8; sym1 = 10'h127; end
-		27: begin sym0 = 10'h271; sym1 = 10'h28e; end
-		28: begin sym0 = 10'h1d0; sym1 = 10'h12f; end
-		29: begin sym0 = 10'h279; sym1 = 10'h286; end
-		30: begin sym0 = 10'h27d; sym1 = 10'h282; end
-		31: begin sym0 = 10'h281; sym1 = 10'h27e; end
-		32: begin sym0 = 10'h180; sym1 = 10'h17f; end
-		33: begin sym0 = 10'h17c; sym1 = 10'h183; end
-		34: begin sym0 = 10'h178; sym1 = 10'h187; end
-		35: begin sym0 = 10'h184; sym1 = 10'h17b; end
-		36: begin sym0 = 10'h170; sym1 = 10'h18f; end
-		37: begin sym0 = 10'h18c; sym1 = 10'h173; end
-		38: begin sym0 = 10'h188; sym1 = 10'h177; end
-		39: begin sym0 = 10'h221; sym1 = 10'h2de; end
-		40: begin sym0 = 10'h160; sym1 = 10'h19f; end
-		41: begin sym0 = 10'h19c; sym1 = 10'h163; end
-		42: begin sym0 = 10'h198; sym1 = 10'h167; end
-		43: begin sym0 = 10'h231; sym1 = 10'h2ce; end
-		44: begin sym0 = 10'h190; sym1 = 10'h16f; end
-		45: begin sym0 = 10'h239; sym1 = 10'h2c6; end
-		46: begin sym0 = 10'h23d; sym1 = 10'h2c2; end
-		47: begin sym0 = 10'h2c1; sym1 = 10'h23e; end
-		48: begin sym0 = 10'h140; sym1 = 10'h1bf; end
-		49: begin sym0 = 10'h1bc; sym1 = 10'h143; end
-		50: begin sym0 = 10'h1b8; sym1 = 10'h147; end
-		51: begin sym0 = 10'h211; sym1 = 10'h2ee; end
-		52: begin sym0 = 10'h1b0; sym1 = 10'h14f; end
-		53: begin sym0 = 10'h219; sym1 = 10'h2e6; end
-		54: begin sym0 = 10'h21d; sym1 = 10'h2e2; end
-		55: begin sym0 = 10'h2e1; sym1 = 10'h21e; end
-		56: begin sym0 = 10'h1a0; sym1 = 10'h15f; end
-		57: begin sym0 = 10'h209; sym1 = 10'h2f6; end
-		58: begin sym0 = 10'h20d; sym1 = 10'h2f2; end
-		59: begin sym0 = 10'h2f1; sym1 = 10'h20e; end
-		60: begin sym0 = 10'h205; sym1 = 10'h2fa; end
-		61: begin sym0 = 10'h2f9; sym1 = 10'h206; end
-		62: begin sym0 = 10'h2fd; sym1 = 10'h202; end
-		63: begin sym0 = 10'h201; sym1 = 10'h2fe; end
-	endcase
+always @ (*) begin: count_d_pop
+	integer i;
+	popcount = 3'd0;
+	// Ignore d[0] as it's implicitly masked
+	for (i = 1; i < 8; i = i + 1)
+		popcount = popcount + {2'h0, d[i]};
 end
 
-reg [9:0] q_next;
-reg       use_q_next;
+reg [7:0] d_reduced;
+reg symbol_is_second;
+
+always @ (*) begin: reduce_d
+	integer i;
+	d_reduced = 8'h0;
+	for (i = 1; i < 8; i = i + 1)
+		d_reduced[i] = d_reduced[i - 1] ^ d[i];
+end
+
+wire [9:0] pixel_q = {
+	!low_balance,
+	low_balance,
+	d_reduced ^ (8'h55 & {8{!low_balance}}) ^ {8{symbol_is_second}}
+};
 
 always @ (posedge clk or negedge rst_n) begin
 	if (!rst_n) begin
+		symbol_is_second <= 1'b0;
 		q <= 10'd0;
-		q_next <= 10'd0;
 	end else begin
 		if (den) begin
-			q <= use_q_next ? q_next : sym0;
-			q_next <= sym1;
-			use_q_next <= !use_q_next;
+			symbol_is_second <= !symbol_is_second;
+			q <= pixel_q;
 		end else begin
-			use_q_next <= 1'b0;
+			symbol_is_second <= 1'b0;
 			case (c)
 				2'b00: q <= 10'b1101010100;
 				2'b01: q <= 10'b0010101011;

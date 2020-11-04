@@ -29,15 +29,9 @@ module smoldvi_serialiser (
 reg [9:0] d_delay;
 wire [1:0] data_x5;
 
-always @ (posedge clk_pix or negedge rst_n_pix) begin
-	if (!rst_n_pix) begin
-		d_delay <= 10'h0;
-	end else begin
-		d_delay <= d;
-	end
+always @ (posedge clk_pix) begin
+	d_delay <= d;
 end
-
-
 
 smoldvi_fast_gearbox #(
 	.W_IN         (10),
@@ -56,14 +50,9 @@ smoldvi_fast_gearbox #(
 reg [1:0] data_x5_delay;
 reg [1:0] data_x5_ndelay;
 
-always @ (posedge clk_x5 or negedge rst_n_x5) begin
-	if (!rst_n_x5) begin
-		data_x5_delay <= 2'h0;
-		data_x5_ndelay <= 2'h0;
-	end else begin
-		data_x5_delay <= data_x5;
-		data_x5_ndelay <= ~data_x5;
-	end
+always @ (posedge clk_x5) begin
+	data_x5_delay <= data_x5;
+	data_x5_ndelay <= ~data_x5;
 end
 
 ddr_out ddrp (

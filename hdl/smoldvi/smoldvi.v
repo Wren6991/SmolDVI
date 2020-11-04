@@ -54,7 +54,7 @@ always @ (posedge clk_pix or negedge rst_n_pix) begin
 	end
 end
 
-dvi_timing #(
+smoldvi_timing #(
 	.H_SYNC_POLARITY (H_SYNC_POLARITY),
 	.H_FRONT_PORCH   (H_FRONT_PORCH),
 	.H_SYNC_WIDTH    (H_SYNC_WIDTH),

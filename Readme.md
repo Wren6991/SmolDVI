@@ -3,9 +3,11 @@ SmolDVI
 
 I'm playing with direct DVI output on [iCEBreaker](https://1bitsquared.com/products/icebreaker) and [iCEstick](https://www.latticesemi.com/icestick) dev boards. The iCE40 UP5k on the iCEBreaker is challenging because it's extremely slow, and the iCE40 HX1k on the iCEstick is extremely small, so I guess this is a project to build a small, fast DVI core.
 
-Currently I've spent a few hours playing with this project, using some existing DVI gateware I wrote, plus a new serialiser design to improve timing on the UP5k. I've displayed a 640x480p 60Hz test pattern with mild timing violations, and a 1280x720p 30Hz (372 Mbps/lane) test pattern with much more exciting levels of timing violation. The 640x480p is something that I think could be practical, but I don't see 720p being much more than a party trick.
+Currently the example design uses around 9% of an iCE40 UP5k (\~240 LUTs, quite a few flops, \~500 LCs packed) for a pixel-doubled RGB666 640x480p 60 Hz output. This leaves plenty of room on the UP5k to add a more interesting source of pixels!
 
-This design performs TMDS encode in the pixel clock domain, and then crosses the TMDS data to a x5 clock domain, where it is then fed to DDR output registers in the IO cells. The logic in the x5 clock domain is necessarily quite lean, because the timing is so tight on UP5k, but there is plenty of area to be squeezed out of the pixel clock side -- the example design is currently around 600 LUTs. In particular I want to try some stateless pixel-doubled TMDS encode tricks.
+The example design uses the UP5k's single PLL to generate a half-rate TMDS bit clock (126 MHz in the case of 480p60), and divides this down to a 25.2 MHz pixel clock in-fabric. TMDS encode takes place in the pixel clock domain, and uses quite a nice trick to perform the encode with minimal logic (around 20 LUTs per lane), which is [described in the comments](hdl/smoldvi/smoldvi.v).
+
+Currently there are some mild timing violations (but reliably working on my iCEBreaker) in the bit clock domain at 480p60 (252 Mbps), and much more exciting levels of timing violation at 720p30 reduced blanking (372 Mbps). At VGA resolution, this is already a fairly practical component you could build into your iCE40UP5k-based design, but the 720p30 mode is more of a party trick.
 
 Building
 ========

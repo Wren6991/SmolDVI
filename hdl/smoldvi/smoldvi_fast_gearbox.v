@@ -49,9 +49,10 @@ end
 (* keep = 1'b1 *) reg [STORAGE_SIZE-1:0] capture_reg;
 reg [N_OUT-1:0] rmask;
 
-always @ (posedge clk_out or negedge rst_n_out) begin: capture_proc
+always @ (posedge clk_out or negedge rst_n_out) begin
 	if (!rst_n_out) begin
-		rmask <= 10'b00001_00000; // FIXME general code to select antiphase point
+		// Reads start as far as possible from writes
+		rmask <= {{N_OUT-1{1'b0}}, 1'b1} << (N_OUT / 2);
 	end else begin
 		rmask <= {rmask[N_OUT-2:0], rmask[N_OUT-1]};
 	end

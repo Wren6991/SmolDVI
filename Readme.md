@@ -26,6 +26,8 @@ make -f Icebreaker.mk prog
 
 This will build a UP5k FPGA image and flash it to an iCEBreaker plugged into your system. You will need some kind of PMOD to HDMI/DVI adapter to connect this to a display. See the [pin constraints file](synth/smoldvi_icebreaker.pcf) for pinout. I am using [this adapter I knocked up in KiCad](https://github.com/Wren6991/DVI-PMOD).
 
+In the `synth` directory, you will also find two other Makefile stubs, `Icesugar.mk` and `Icestick.mk`. These are for the [iCESugar](https://github.com/wuxx/icesugar) (a wonderful, cheaply available UP5k board) and [iCEstick](https://www.latticesemi.com/icestick) dev boards.
+
 Reusing
 =======
 

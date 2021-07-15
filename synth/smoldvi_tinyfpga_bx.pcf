@@ -1,0 +1,14 @@
+# LEDs
+set_io --warn-no-port led B3 # Green on main board
+
+set_io --warn-no-port clk_osc B2
+
+# DVI on PMOD P2
+set_io --warn-no-port dvi_p[1] A2 #  D1+, 1
+set_io --warn-no-port dvi_n[1] A1 #  D1-, 2
+set_io --warn-no-port dvi_p[3] B1 #  CK+, 3
+set_io --warn-no-port dvi_n[3] C2 #  CK-, 4
+set_io --warn-no-port dvi_p[2] C1 #  D2+, 5
+set_io --warn-no-port dvi_n[2] D2 #  D2-, 6
+set_io --warn-no-port dvi_p[0] D1 #  D0+, 7
+set_io --warn-no-port dvi_n[0] E2 #  D0-, 8
